@@ -40,6 +40,7 @@
       font-size: 1.5rem;
       color: #fff;
       opacity: 0.9;
+      pointer-events: none;
     }
 
     .tremendo {
@@ -120,7 +121,7 @@
 
   <div id="overlay">
     <div id="mensagem">
-      <h2>🎉 Feliz Aniversário Teteu 🎊 </h2>
+      <h2>🎉 Feliz Aniversário Teteu 🎊</h2>
       <p>
         Que seu dia seja incrível e cheio de alegria,<br>
         amor e boas surpresas.<br><br>
@@ -129,14 +130,15 @@
         papai do céu abençoe cada novo passo teu.<br><br>
 
         Gosto muito da sua companhia, parabéns por ter se tornado esse menino<br>
-        incrível e cheio de sonhos 🥳✨
-                 🎁🤞💝🎈
+        incrível e cheio de sonhos 🥳✨<br>
+        🎁🤞💝🎈
       </p>
       <small id="segredo">💖 Se você chegou até aqui, saiba que você é muito especial pra mim.</small>
       <button id="rever">Ver novamente</button>
     </div>
   </div>
 
+  <!-- Sons -->
   <audio id="somFuga">
     <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg">
   </audio>
@@ -180,8 +182,15 @@
     ];
 
     function mover(el) {
-      el.style.left = Math.random() * (window.innerWidth - 80) + 'px';
-      el.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+      const margemTopo = 140;
+      const largura = window.innerWidth - 80;
+      const altura = window.innerHeight - 80 - margemTopo;
+
+      const x = Math.random() * largura;
+      const y = Math.random() * altura + margemTopo;
+
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
     }
 
     mover(presente);
@@ -235,7 +244,7 @@
       }
     });
 
-    // Easter Egg: pressionar a carta por 3 segundos
+    // Easter Egg: pressionar a mensagem por 3 segundos
     document.getElementById('mensagem').addEventListener('touchstart', () => {
       toqueSegredo = setTimeout(() => {
         segredo.style.display = 'block';
@@ -251,12 +260,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
