@@ -17,6 +17,58 @@
       overflow: hidden;
     }
 
+    /* Tela de senha */
+    #senhaOverlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+    }
+
+    #senhaBox {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      max-width: 300px;
+      width: 90%;
+    }
+
+    #senhaBox h2 {
+      margin-top: 0;
+    }
+
+    #senhaBox input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    #senhaBox button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #erroSenha {
+      margin-top: 10px;
+      color: #ff4d6d;
+      display: none;
+      font-size: 0.9rem;
+    }
+
     .item {
       position: absolute;
       cursor: pointer;
@@ -114,6 +166,17 @@
 
 <body>
 
+  <!-- Tela de senha -->
+  <div id="senhaOverlay">
+    <div id="senhaBox">
+      <h2>🔐 Área ultra secreta</h2>
+      <p>Somente pessoas especiais entram 😏</p>
+      <input type="password" id="senhaInput" placeholder="Digite a senha" />
+      <button id="entrar">Entrar</button>
+      <div id="erroSenha">Senha errada 👀 curioso(a)!</div>
+    </div>
+  </div>
+
   <div id="hint"></div>
 
   <div id="presente" class="item">🎁</div>
@@ -138,7 +201,6 @@
     </div>
   </div>
 
-  <!-- Sons -->
   <audio id="somFuga">
     <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg">
   </audio>
@@ -152,6 +214,28 @@
   </audio>
 
   <script>
+    const senhaCorreta = 'teteu2025';
+
+    const senhaOverlay = document.getElementById('senhaOverlay');
+    const senhaInput = document.getElementById('senhaInput');
+    const entrar = document.getElementById('entrar');
+    const erroSenha = document.getElementById('erroSenha');
+
+    entrar.addEventListener('click', verificarSenha);
+    senhaInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') verificarSenha();
+    });
+
+    function verificarSenha() {
+      if (senhaInput.value === senhaCorreta) {
+        senhaOverlay.style.display = 'none';
+      } else {
+        erroSenha.style.display = 'block';
+        senhaInput.value = '';
+        senhaInput.focus();
+      }
+    }
+
     const presente = document.getElementById('presente');
     const envelope = document.getElementById('envelope');
     const overlay = document.getElementById('overlay');
@@ -182,15 +266,8 @@
     ];
 
     function mover(el) {
-      const margemTopo = 140;
-      const largura = window.innerWidth - 80;
-      const altura = window.innerHeight - 80 - margemTopo;
-
-      const x = Math.random() * largura;
-      const y = Math.random() * altura + margemTopo;
-
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
+      el.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+      el.style.top = Math.random() * (window.innerHeight - 80) + 'px';
     }
 
     mover(presente);
@@ -244,7 +321,6 @@
       }
     });
 
-    // Easter Egg: pressionar a mensagem por 3 segundos
     document.getElementById('mensagem').addEventListener('touchstart', () => {
       toqueSegredo = setTimeout(() => {
         segredo.style.display = 'block';
