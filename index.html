@@ -17,58 +17,7 @@
       overflow: hidden;
     }
 
-    /* Tela de senha */
-    #senhaOverlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 20;
-    }
-
-    #senhaBox {
-      background: #fff;
-      padding: 30px 25px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      max-width: 300px;
-      width: 90%;
-    }
-
-    #senhaBox h2 {
-      margin-top: 0;
-    }
-
-    #senhaBox input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      margin-top: 10px;
-    }
-
-    #senhaBox button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    #erroSenha {
-      margin-top: 10px;
-      color: #ff4d6d;
-      display: none;
-      font-size: 0.9rem;
-    }
-
+    /* -------- ITENS -------- */
     .item {
       position: absolute;
       cursor: pointer;
@@ -92,7 +41,7 @@
       font-size: 1.5rem;
       color: #fff;
       opacity: 0.9;
-      pointer-events: none;
+      z-index: 2;
     }
 
     .tremendo {
@@ -107,6 +56,7 @@
       100% { transform: translateX(0); }
     }
 
+    /* -------- OVERLAY FINAL -------- */
     #overlay {
       position: fixed;
       inset: 0;
@@ -128,16 +78,16 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     }
 
+    @keyframes zoom {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
     #mensagem small {
       display: none;
       margin-top: 15px;
       color: #ff6f91;
       font-weight: bold;
-    }
-
-    @keyframes zoom {
-      from { transform: scale(0); }
-      to { transform: scale(1); }
     }
 
     #rever {
@@ -151,6 +101,7 @@
       cursor: pointer;
     }
 
+    /* -------- CONFETE -------- */
     .confete {
       position: fixed;
       font-size: 1.5rem;
@@ -161,19 +112,68 @@
       from { transform: translateY(-50px); opacity: 1; }
       to { transform: translateY(100vh); opacity: 0; }
     }
+
+    /* -------- TELA DE SENHA -------- */
+    #senhaOverlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+    }
+
+    #senhaBox {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 320px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+      animation: zoom 0.4s ease;
+    }
+
+    #senhaBox input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    #senhaBox button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #ff6f91;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #erroSenha {
+      color: #ff4d6d;
+      margin-top: 10px;
+      display: none;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Tela de senha -->
+  <!-- TELA DE SENHA -->
   <div id="senhaOverlay">
     <div id="senhaBox">
       <h2>🔐 Área ultra secreta</h2>
-      <p>Somente pessoas especiais entram 😏</p>
-      <input type="password" id="senhaInput" placeholder="Digite a senha" />
-      <button id="entrar">Entrar</button>
-      <div id="erroSenha">Senha errada 👀 curioso(a)!</div>
+      <p>Somente pessoas especiais passam 😏</p>
+      <input type="password" id="inputSenha" placeholder="Digite a senha" />
+      <button onclick="verificarSenha()">Entrar</button>
+      <div id="erroSenha">❌ Senha errada… curioso(a) 👀</div>
     </div>
   </div>
 
@@ -201,6 +201,7 @@
     </div>
   </div>
 
+  <!-- SONS -->
   <audio id="somFuga">
     <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg">
   </audio>
@@ -214,27 +215,22 @@
   </audio>
 
   <script>
-    const senhaCorreta = 'teteu2025';
-
-    const senhaOverlay = document.getElementById('senhaOverlay');
-    const senhaInput = document.getElementById('senhaInput');
-    const entrar = document.getElementById('entrar');
-    const erroSenha = document.getElementById('erroSenha');
-
-    entrar.addEventListener('click', verificarSenha);
-    senhaInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') verificarSenha();
-    });
+    const senhaCorreta = "teteu2025";
 
     function verificarSenha() {
-      if (senhaInput.value === senhaCorreta) {
-        senhaOverlay.style.display = 'none';
+      const input = document.getElementById('inputSenha').value;
+      const erro = document.getElementById('erroSenha');
+
+      if (input === senhaCorreta) {
+        document.getElementById('senhaOverlay').style.display = 'none';
       } else {
-        erroSenha.style.display = 'block';
-        senhaInput.value = '';
-        senhaInput.focus();
+        erro.style.display = 'block';
       }
     }
+
+    document.getElementById('inputSenha').addEventListener('keypress', e => {
+      if (e.key === 'Enter') verificarSenha();
+    });
 
     const presente = document.getElementById('presente');
     const envelope = document.getElementById('envelope');
@@ -267,7 +263,7 @@
 
     function mover(el) {
       el.style.left = Math.random() * (window.innerWidth - 80) + 'px';
-      el.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+      el.style.top = Math.random() * (window.innerHeight - 120) + 'px';
     }
 
     mover(presente);
